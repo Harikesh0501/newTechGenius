@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tech Genius Club</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarpanch:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+  <style>
+/* Minimal slider styling for demonstration */
+.slider {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.slides {
+  display: flex;
+  transition: transform 0.5s;
+}
+.slide {
+  min-width: 100%;
+  box-sizing: border-box;
+}
+.slider-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #23408e;
+  color: #fff;
+  border: none;
+  font-size: 2rem;
+  padding: 0.2em 0.6em;
+  cursor: pointer;
+  z-index: 2;
+  border-radius: 50%;
+  opacity: 0.7;
+}
+.slider-button.prev { left: 10px; }
+.slider-button.next { right: 10px; }
+.slider-dots {
+  text-align: center;
+  margin-top: 10px;
+}
+.slider-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 4px;
+  background: #a1c4fd;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.slider-dot.active {
+  background: #23408e;
+  opacity: 1;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+.modal-content {
+  margin: 40px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 90vw;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.modal-content img {
+  max-width: 180px;
+  border-radius: 8px;
+}
+.close {
+  color: #23408e;
+  font-size: 2rem;
+  font-weight: bold;
+  position: absolute;
+  right: 30px;
+  top: 20px;
+  cursor: pointer;
+}
+.mobile-header {
+  display: none;
+  background: #000000;
+  padding: 10px;
+  position: relative;
+}
+.mobile-header button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.sidebar {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  padding: 20px;
+  z-index: 20;
+}
+.sidebar a {
+  display: block;
+  color: #23408e;
+  text-decoration: none;
+  padding: 10px 0;
+}
+.sidebar .close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #23408e;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .slider {
+    max-width: 100%;
+  }
+  .sidebar {
+    display: block;
+  }
+}
+  </style>
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    .slider-content {
+      opacity: 0;
+      transform: translateX(30px);
+      transition: all 0.6s ease-in-out;
+    }
+    .slider-content.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  </style>
+
+</head>
+<body>
+<div class="mobile-header">
+  <button id="menu-toggle" aria-label="Open Menu">&#9776;</button>
+  <span style="color:#fff; font-weight:700; font-size:1.1rem; margin-left:12px;">TechGenius Club</span>
+</div>
+<div id="sidebar" class="sidebar">
+  <button class="close-btn" id="close-sidebar" aria-label="Close Menu">&times;</button>
+  <a href="#home">Home</a>
+  <a href="#about">About Us</a>
+  <a href="#committee">Core Committee</a>
+  <a href="#upcoming">Upcoming Events</a>
+  <a href="#past">Past Events</a>
+  <a href="#achievements">Achievements</a>
+  <a href="#collaborators">Collaborators</a>
+</div>
+  <header>
+    <nav>
+      <img src="tg.jpg" alt="University Logo" class="nav-logo-img nav-logo-left" />
+      <!-- <div class="nav-logo-img"><img src="logo.png" alt="TechGenius Club Logo" /></div> -->
+       <div class="nav-logo-text">Tech Genius</div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#committee">Core Committee</a></li>
+        <li><a href="#upcoming">Upcoming Events</a></li>
+        <li><a href="#past">Past Events</a></li>
+        <li><a href="#achievements">Achievements</a></li>
+        <li><a href="#collaborators">Collaborators</a></li>
+      </ul>
+      <img src="university.png" alt="College Logo" class="nav-logo-img nav-logo-right" />
+    </nav>
+  </header>
+  <main>
+    <!-- Home Section -->
+    <section data-aos="fade-up" id="home" class="section home-section">
+  <div data-aos="flip-left" data-aos-duration="1500" data-aos-easing="ease-in-out">
+    <div class="home-center">
+      <span class="home-badge">✨ Welcome to Innovation Hub</span>
+      <h1 class="home-title">TechGenius Student Club</h1>
+      <p class="home-sub">From Ideas to Impact - Where brilliant minds collaborate, innovate, and shape the future of technology.</p>
+      <div class="home-actions">
+        <a href="https://forms.gle/nLf56MAAA3HEfijS8" target="_blank" class="btn btn-primary">Join Our Community</a>
+        <a href="#upcoming" class="btn btn-outline">Explore Events</a>
+      </div>
+      <div class="home-icons">
+        <div>
+          <span class="icon">💻</span>
+          <div class="icon-label">Research</div>
+        </div>
+        <div>
+          <span class="icon">⚙️</span>
+          <div class="icon-label">Hackathons</div>
+        </div>
+        <div>
+          <span class="icon">🌐</span>
+          <div class="icon-label">Web Dev</div>
+        </div>
+        <div>
+          <span class="icon">⚡</span>
+          <div class="icon-label">Innovation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- About Section -->
+    <section id="about" class="section about-section">
+  <div data-aos="fade-up">
+ 
+      <h2 class="section-title">Empowering the Next Generation of Tech Leaders</h2>
+      <p class="section-desc">To build a globally recognized community of innovators and problem solvers using advanced technology and research to tackle global challenges and drive sustainable change.</p>
+      <div class="about-features">
+        <div class="feature-card">
+          <span class="feature-icon">👥</span>
+          <div class="feature-title">Community Driven</div>
+          <div class="feature-desc">Connect with like-minded individuals who share your passion for technology and innovation.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">⚙️</span>
+          <div class="feature-title">Skill Development</div>
+          <div class="feature-desc">Participate in workshops, hackathons, and coding challenges to enhance your technical skills.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">💡</span>
+          <div class="feature-title">Innovation Hub</div>
+          <div class="feature-desc">Turn your creative ideas into reality with access to resources and mentorship.</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🏆</span>
+          <div class="feature-title">Achievement Recognition</div>
+          <div class="feature-desc">Showcase your projects and get recognition for your contributions to the tech community.</div>
+        </div>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-value">50+</div>
+          <div class="stat-label">Active Members</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">10+</div>
+          <div class="stat-label">Projects Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">5+</div>
+          <div class="stat-label">Events Hosted</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">1</div>
+          <div class="stat-label">Year Strong</div>
+        </div>
+      </div>
+      <div class="about-vision-mission">
+        <div>
+          <h3>Our Vision</h3>
+          <p>
+            To become a pioneering student-led tech community that nurtures innovation, fosters impactful solutions, and leads change through collaboration, creativity, and ethical technology use.<br><br>
+            We envision a vibrant ecosystem where students are empowered to explore new ideas, develop advanced skills, and make a positive impact on society through technology.<br><br>
+            Our goal is to inspire future leaders who drive change and set new standards in research, development, and teamwork.
+          </p>
+        </div>
+        <div>
+          <h3>Our Mission</h3>
+          <p>
+            To empower students with the skills, knowledge, and opportunities to explore cutting-edge technologies, build practical solutions, and collaborate with peers and professionals for societal betterment.<br><br>
+            We strive to provide hands-on experiences, mentorship, and resources that help members grow personally and professionally.<br><br>
+            By fostering a culture of innovation and inclusivity, we aim to bridge the gap between academia and industry, preparing students for real-world challenges.
+          </p>
+        </div>
+        <div>
+          <h3>Objectives</h3>
+          <ul>
+            <li><b>Fostering Innovation & Skills Development –</b> Encouraging creativity through hackathons, research, hands-on projects, and mentorship.</li>
+            <li><b>Bridging Academia & Practical Implementation –</b> Promoting real-world applications through teamwork and project-based learning.</li>
+            <li><b>Building a Strong Professional Network –</b> Connecting students with industry professionals and preserving knowledge.</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+</section>
+
+    <!-- Core Committee Section -->
+    <section id="committee" class="section committee-section">
+  <div data-aos="fade-up">
+  
+      <h2 class="section-title">Faculty Coordinators & Student Leaders</h2>
+
+      <!-- Faculty Coordinators -->
+      <h3 class="committee-subtitle">Faculty Coordinators</h3>
+      <div class="committee-grid">
+        <div class="committee-card" data-aos="fade-left">
+          <img src="https://github.com/Jaymin-2603/image/raw/main/Amit%20Sir.jpg" alt="Dr.Amit Thakkar" />
+          <div class="committee-name">Dr. Amit Thakkar</div>
+          <div class="committee-role">Convener</div>
+          <a href="https://www.linkedin.com/in/dr-amit-thakkar-66b52622/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a>
+        </div>
+        <div class="committee-card" data-aos="fade-left">
+          <img src="https://github.com/Jaymin-2603/image/raw/main/Jigar%20Sir.jpg" alt="Dr.Jigar Sarda" />
+          <div class="committee-name">Dr. Jigar Sarda</div>
+          <div class="committee-role">Faculty Coordinator</div>
+          <a href="https://www.linkedin.com/in/dr-jigar-sarda-00384414/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a>
+        </div>
+        <div class="committee-card" data-aos="fade-right">
+          <img src="https://github.com/Jaymin-2603/image/raw/main/Avani%20Maam.jpg" alt="Avani Khokhariya" />
+          <div class="committee-name">Avani Khokhariya</div>
+          <div class="committee-role">Faculty Coordinator</div>
+          <a href="https://www.linkedin.com/in/avani-khokhariya/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a>
+        </div>
+        <div class="committee-card" data-aos="fade-right">
+          <img src="mam.jpg" alt="Srushti Gajjar" />
+          <div class="committee-name">Srushti Gajjar</div>
+          <div class="committee-role">Faculty Coordinator</div>
+          <a href="https://www.linkedin.com/in/srushti-gajjar-92b829142/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a>
+        </div>
+      </div>
+
+      <!-- Student Leaders -->
+      <h3 class="committee-subtitle">Student Leaders</h3>
+      <div class="committee-rows">
+        <!-- Row 1 -->
+        <div class="committee-grid" data-aos="fade-left">
+          <div class="committee-card"><img src="https://github.com/Jaymin-2603/image/raw/main/Mishri.jpg" alt="Mishri Bhanwadia" /><div class="committee-name">Mishri Bhanwadia</div><div class="committee-role">President</div><a href="https://www.linkedin.com/in/mishri-bhanwadia-24700631b/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Akshat%20Patel.jpg?raw=true" alt="Akshat Patel" /><div class="committee-name">Akshat Patel</div><div class="committee-role">Vice President</div><a href="https://www.linkedin.com/in/akshat-patel-123456789/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/my%20pic.jpg?raw=true" alt="Harikesh Patel" /><div class="committee-name">Harikesh Patel</div><div class="committee-role">Treasurer</div><a href="https://www.linkedin.com/in/harikesh-patel-059b0331a/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Yashvi%20Tanna.jpg?raw=true" alt="Yashvi Tanna" /><div class="committee-name">Yashvi Tanna</div><div class="committee-role">Secretary</div><a href="https://www.linkedin.com/in/yashvi-tanna-207058327/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Jaymin-2603/image/raw/main/pia%20didi.jpg" alt="Pia Patel" /><div class="committee-name">Pia Patel</div><div class="committee-role">R&D Team</div><a href="https://www.linkedin.com/in/pia-patel-703531283/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+        </div>
+        <!-- Row 2 -->
+        <div class="committee-grid" data-aos="fade-right">
+          <div class="committee-card"><img src="https://github.com/Jaymin-2603/image/raw/main/tanvi%20didi.jpg" alt="Tanvi Mehta" /><div class="committee-name">Tanvi Mehta</div><div class="committee-role">R&D Team</div><a href="https://www.linkedin.com/in/tanvi-mehta-26a7b4211/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Khushi%20Ka.Patel.jpg?raw=true" alt="Khushi Ka.Patel" /><div class="committee-name">Khushi Ka.Patel</div><div class="committee-role">R&D Team</div><a href="https://www.linkedin.com/in/khushi-kapatel-782733322/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Priya%20Aghera.jpg?raw=true" alt="Priya Aghera" /><div class="committee-name">Priya Aghera</div><div class="committee-role">Public Relation Head</div><a href="https://www.linkedin.com/in/priya-aghera-642b3a31a/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Dhanya%20vala.jpg?raw=true" alt="Dhanya Vala" /><div class="committee-name">Dhanya Vala</div><div class="committee-role">Public Relation Head</div><a href="https://www.linkedin.com/in/dhanya-vala-96b643375/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Yash%20Patel.jpg?raw=true" alt="Yash Patel" /><div class="committee-name">Yash Patel</div><div class="committee-role">Public Relation Head</div><a href="https://www.linkedin.com/in/yash-patel-518688372/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+        </div>
+        <!-- Row 3 -->
+        <div class="committee-grid" data-aos="fade-left">
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Mahek%20Hirpara.jpg?raw=true" alt="Mahek Hirpara" /><div class="committee-name">Mahek Hirpara</div><div class="committee-role">Public Relation Head</div><a href="https://www.linkedin.com/in/mahek-hirpara-986876372/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Hetvi%20Tank.jpg?raw=true" alt="Hetvi Tank" /><div class="committee-name">Hetvi Taank</div><div class="committee-role">Hackathon Coordinator</div><a href="https://www.linkedin.com/in/hetvi-taank-217aaa31a/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Yash%20Bharvada.jpg?raw=true" alt="Yash Bharvada" /><div class="committee-name">Yash Bharvada</div><div class="committee-role">Hackathon Coordinator</div><a href="https://www.linkedin.com/in/yash-bharvada-4361282b2/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Dhrumil%20Amin.jpg?raw=true" alt="Dhrumil Amin" /><div class="committee-name">Dhrumil Amin</div><div class="committee-role">Hackathon Coordinator</div><a href="https://www.linkedin.com/in/dhrumil-amin-47429a260/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Dhruv%20Bhagat.jpg?raw=true" alt="Dhruv Bhagat" /><div class="committee-name">Dhruv Bhagat</div><div class="committee-role">Hackathon Coordinator</div><a href="https://www.linkedin.com/in/dhruv-bhagat-0a289a284/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+        </div>
+        <!-- Row 4 (5 example cards) -->
+        <div class="committee-grid" data-aos="fade-right">
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Heet%20Parikh.jpg?raw=true" alt="Heet Parikh" /><div class="committee-name">Heet Parikh</div><div class="committee-role">Hackathon Coordinator</div><a href="https://www.linkedin.com/in/heetparikh/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Harshal%20Patel.jpg?raw=true" alt="Harshal Patel" /><div class="committee-name">Harshal Patel</div><div class="committee-role">Social Media Head</div><a href="https://www.linkedin.com/in/harshal-patel-0b303a30a/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Parth%20Oza.jpg?raw=true" alt="Parth Oza" /><div class="committee-name">Parth Oza</div><div class="committee-role">Social Media Head</div><a href="https://www.linkedin.com/in/parth-oza-17683b317/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Mahek%20Dhebariya.jpg?raw=true" alt="Mahek Dhebariya" /><div class="committee-name">Mahek Dhebariya</div><div class="committee-role">Social Media Head</div><a href="https://www.linkedin.com/in/mahek-dhebariya-a7a054319/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Jay%20Ladva.jpg?raw=true" alt="Jay Ladva" /><div class="committee-name">Jay Ladva</div><div class="committee-role">Social Media Head</div><a href="https://www.linkedin.com/in/jay-ladva-b23a7931a/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+        </div>
+        <!-- Row 5 (3 example cards) -->
+        <div class="committee-grid" data-aos="fade-left">
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Rudri%20Kakadiya.jpg?raw=true" alt="Rudri Kakadiya" /><div class="committee-name">Rudri Kakadiya</div><div class="committee-role">Social Media Head</div><a href="https://www.linkedin.com/in/rudri-kakadiya-502847372/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Kismat%20Shah.jpg?raw=true" alt="Kismat Shah" /><div class="committee-name">Kismat Shah</div><div class="committee-role">Social Media Head</div><a href="https://www.linkedin.com/in/kismat-shah-747849372/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+          <div class="committee-card"><img src="https://github.com/Harikesh0501/committee/blob/main/committee/Shyamganesh%20Vangapandu.jpg?raw=true" alt="Shyamganesh Vangapandu" /><div class="committee-name">Shyamganesh Vangapandu</div><div class="committee-role">Social Media Head</div><a href="https://www.linkedin.com/in/shyam-vangapandu-34a846372/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" class="Social-icon" /></a></div>
+        </div>
+      </div>
+</section>
+
+    <!-- Upcoming Events Section -->
+    <section id="upcoming">
+  <div data-aos="fade-up">
+  <h2>Upcoming Events</h2>
+  <!-- Upcoming Events Slider -->
+  <div class="slider" id="upcoming-slider">
+    <div class="circle-btn-wrapper">
+      <button class="slider-button prev" aria-label="Previous Event">&#10094;</button>
+    </div>
+    <div class="slides">
+      <div class="slide">
+        <img src="https://github.com/Harikesh0501/committee/blob/main/session%20web.png?raw=true" alt="Stay Tuned" />
+        <div class="slider-caption">Web Development Workshop</div>
+      </div>
+      <div class="slide">
+        <img src="https://github.com/Jaymin-2603/image/raw/main/Upcoming%20Event.jpg" alt="Planning in Progress" />
+        <div class="slider-caption">Exciting Events Are Being Planned</div>
+      </div>
+      <div class="slide">
+        <img src="https://github.com/Jaymin-2603/image/raw/main/Upcoming%20Event.jpg" alt="Future Ideas" />
+        <div class="slider-caption">New Event Announcements Coming Soon</div>
+      </div>
+    </div>
+    <div class="circle-btn-wrapper">
+      <button class="slider-button next" aria-label="Next Event">&#10095;</button>
+    </div>
+    <div class="slider-dots"></div>
+  </div>
+  <!-- Suggest an Event Button -->
+  <div style="text-align: center; margin-top: 48px;">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScPoo--BnU6Nv8Om3deReOHTlmyUuVyRgW3ecLhDpFOPNU-MQ/viewform?usp=header"
+       target="_blank"
+       class="suggest-event-button"
+       style="
+         background-color: #007BFF;
+         color: white;
+         padding: 12px 28px;
+         text-decoration: none;
+         border-radius: 7px;
+         font-weight: bold;
+         font-size: 1.15rem;
+         display: inline-block;
+       ">
+      Suggest an Event
+    </a>
+  </div>
+  </div>
+</section>
+
+    <!-- Past Events Section -->
+    <section id="past">
+  <div data-aos="fade-up">
+  <h2>Past Events</h2>
+
+  <div class="slider" id="past-slider">
+    <div class="circle-btn-wrapper">
+      <button class="slider-button prev" aria-label="Previous Event">&#10094;</button>
+    </div>
+
+    <div class="slides">
+      <div class="slide">
+        <div class="gallery-grid">
+          <img src="https://github.com/Jaymin-2603/image/raw/main/Upcoming%20Event.jpg" alt="Past Event 1" />
+        </div>
+        <div class="slider-caption">C-Quest — coding quiz, treasure hunt & teamwork</div>
+      </div>
+
+      <div class="slide">
+        <div class="gallery-grid">
+          <img src="https://github.com/Jaymin-2603/image/raw/main/Upcoming%20Event.jpg" alt="Workshop 1" />
+        </div>
+        <div class="slider-caption">Hands-on workshops & mentoring sessions</div>
+      </div>
+
+      <div class="slide">
+        <div class="gallery-grid">
+          <img src="https://github.com/Harikesh0501/committee/blob/main/combine%20aurdino.png?raw=true" alt="Aurdino Session" />
+        </div>
+        <div class="slider-caption">Hands-on Aurdino workshop</div>
+      </div>
+    </div>
+
+    <div class="circle-btn-wrapper">
+      <button class="slider-button next" aria-label="Next Event">&#10095;</button>
+    </div>
+
+    <div class="slider-dots"></div>
+  </div>
+  </div>
+</section>
+
+<!-- Achievements Section -->
+<section id="achievements">
+  <div data-aos="fade-up">
+    <h2>Achievements</h2>
+    <div class="slider" id="achievements-slider">
+      <div class="circle-btn-wrapper">
+        <button class="slider-button prev" aria-label="Previous Achievement">&#10094;</button>
+      </div>
+      <div class="slides">
+        <div class="slide">
+          <img src="https://github.com/Jaymin-2603/image/raw/main/C-Quest%20Winner.jpg" alt="Achievement 1" />
+          <div class="slider-caption">
+            🏆 <b>Hackathon Champions!</b><br>
+            Palak Donga & Khushi won 1st place in C-Quest Hackathon.<br>
+            <span style="font-size:1.2em;">💻✨</span>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="https://github.com/Jaymin-2603/image/raw/main/Research%20Winner.jpg" alt="Achievement 2" />
+          <div class="slider-caption">
+            📄 <b>Research Excellence!</b><br>
+            Best Project Award at Research Expo 2025.<br>
+            <span style="font-size:1.2em;">🔬🌟</span>
+          </div>
+        </div>
+      </div>
+      <div class="circle-btn-wrapper">
+        <button class="slider-button next" aria-label="Next Achievement">&#10095;</button>
+      </div>
+      <div class="slider-dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Collaborators Section -->
+    <section id="collaborators" class="section collaborators-section">
+  <div data-aos="fade-up">
+   
+      <h2 class="section-title">Collaborators & Partners</h2>
+      <p class="section-desc">We're proud to work with leading academic institutions and industry partners to provide the best opportunities for our members.</p>
+      <h3 class="collab-title">Academic Collaborators</h3>
+      <div class="collab-logos" style="display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;">
+  <div class="collab-profile-card" style="max-width:410px; min-width:290px; margin: 0 auto; padding: 22px 22px 18px 22px;">
+    <div style="display: flex; align-items: flex-start; gap: 18px; margin-bottom: 10px;">
+      <img src="image.jpg"
+        alt="Dr. Parvathaneni Naga Srinivasu"
+        class="collab-profile-img profile-img-round"
+        style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:4px solid #00c6ff; box-shadow:0 0 0 5px #eaf6ff; background:#fff; display:block; margin:0;">
+      <div style="text-align:left;">
+        <div class="collab-profile-name" style="font-weight:700; color:#004a8f; font-size:1.18em; margin-bottom:2px;">
+          Dr. Parvathaneni Naga Srinivasu
+        </div>
+        <div class="collab-profile-role" style="color:#0077cc; font-size:1em; margin-bottom:2px;">
+          Professor, Department of Physics
+        </div>
+        <div class="collab-profile-role" style="color:#004a8f; font-weight:600; font-size:1em;">
+          Pandit Deendayal Energy University (PDEU),<br>Gandhinagar, Gujarat, India
+        </div>
+      </div>
+    </div>
+    <div class="collab-profile-desc" style="font-size:1.04em; color:#222; margin-bottom:18px; line-height:1.6; text-align:left;">
+      Experienced Professor with a demonstrated history of working in the higher education industry.<br>
+      Skilled in Nanomaterials, Spectroscopy, Materials Science, and Research.<br>
+      Strong education professional with a Ph.D. focused in Physics.
+    </div>
+    <div style="text-align:center;">
+      <a href="https://www.linkedin.com/in/dr-parvathaneni-naga-srinivasu-3343187a" target="_blank" class="collab-profile-linkedin-logo" title="View LinkedIn" style="display:inline-block;">
+        <img src="linkdin.jpeg" alt="LinkedIn"
+          style="width:70px; height:70px; border-radius:5px; margin-bottom:4px;">
+      </a>
+    </div>
+  </div>
+  <!-- New Academic Collaborator Card: Dr. Shyam Lal -->
+  <div class="collab-profile-card" style="max-width:410px; min-width:290px; margin: 0 auto; padding: 22px 22px 18px 22px;">
+    <div style="display: flex; align-items: flex-start; gap: 18px; margin-bottom: 10px;">
+      <img src="https://via.placeholder.com/100x100?text=No+Photo"
+        alt="Dr. Shyam Lal"
+        class="collab-profile-img profile-img-round"
+        style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:4px solid #00c6ff; box-shadow:0 0 0 5px #eaf6ff; background:#fff; display:block; margin:0;">
+      <div style="text-align:left;">
+        <div class="collab-profile-name" style="font-weight:700; color:#004a8f; font-size:1.18em; margin-bottom:2px;">
+          Dr. Shyam Lal
+        </div>
+        <div class="collab-profile-role" style="color:#0077cc; font-size:1em; margin-bottom:2px;">
+          Associate Professor, Dept. of Electronics & Communication Engineering
+        </div>
+        <div class="collab-profile-role" style="color:#004a8f; font-weight:600; font-size:1em;">
+          National Institute of Technology Karnataka (NITK),<br>Surathkal, India
+        </div>
+      </div>
+    </div>
+    <div class="collab-profile-desc" style="font-size:1.04em; color:#222; margin-bottom:18px; line-height:1.6; text-align:left;">
+      Recipient of <b>Research Excellence Award 2024</b> from IEEE Computer Society Bangalore Chapter.<br>
+      Awarded for Outstanding Research Publication by VGST, Govt. of Karnataka.<br>
+      Received major research funding for geospatial and soil quality analysis.<br>
+      Active in research, teaching, and academic collaborations at NITK Surathkal.
+    </div>
+    <div style="text-align:center;">
+      <a href="https://www.linkedin.com/in/dr-shyam-lal-21aa61149" target="_blank" class="collab-profile-linkedin-logo" title="View LinkedIn" style="display:inline-block;">
+        <img src="linkdin.jpeg" alt="LinkedIn"
+          style="width:70px; height:70px; border-radius:5px; margin-bottom:4px;">
+      </a>
+    </div>
+  </div>
+    </div>
+</div>
+<h3 class="collab-title">Industrial Collaborators</h3>
+<div class="collab-logos">
+  <img src="https://via.placeholder.com/120x60?text=Industry+1" alt="Industry Partner 1" />
+  <img src="https://via.placeholder.com/120x60?text=Industry+2" alt="Industry Partner 2" />
+  <img src="https://via.placeholder.com/120x60?text=Industry+3" alt="Industry Partner 3" />
+  <img src="https://via.placeholder.com/120x60?text=Industry+4" alt="Industry Partner 4" />
+  <img src="https://via.placeholder.com/120x60?text=Industry+5" alt="Industry Partner 5" />
+</div>
+      </div>
+</section>
+
+
+  </main>
+  <footer>
+  <div class="tg-footer">
+    <div class="footer-grid">
+      <!-- Club Info (Far Left) -->
+      <div class="footer-col footer-club">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <img src="university.png" alt="CHARUSAT Logo" style="width:60px; border-radius:8px;" />
+          <h3 style="margin:0;">Tech Genius Club</h3>
+        </div>
+        <p style="margin-top:16px;">
+          Empowering the next generation of tech leaders through collaboration, innovation, and hands-on learning experiences.
+        </p>
+      </div>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul style="margin-top: 10px;">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#upcoming">Events</a></li>
+          <li><a href="#achievements">Projects</a></li>
+          <li><a href="#committee">Team</a></li>
+        </ul>
+      </div>
+      <!-- Resources -->
+      <div class="footer-col">
+        <h3>Resources</h3>
+        <ul style="margin-top: 10px;">
+          <li><a href="#">Learning Materials</a></li>
+          <li><a href="#">Tutorials</a></li>
+          <li><a href="#">Code Repository</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <!-- Contact Info + Social -->
+      <div class="footer-col footer-contact">
+        <h3>Contact Info</h3>
+        <p style="margin-bottom: 10px;">
+          Computer Science Building (A7)<br>
+          Room 630<br>
+          Wednesday 11:20 AM - 12:00 PM<br>
+          <span style="display: inline-flex; align-items: center; gap: 6px;">
+            <span style="font-size: 1.2em;">✉️</span>
+            <a href="mailto:techgenius@charusat.ac.in" style="color: #2196f3; text-decoration: none; font-size: 1em;">contact@techgeniusclub.edu</a>
+          </span><br>
+          <span style="display: inline-flex; align-items: center; gap: 6px;">
+            <span style="font-size: 1.2em;">📞</span>
+            <a href="tel:+917567702409" style="color: #2196f3; text-decoration: none; font-size: 1em;">+91 75677 02409</a>
+          </span>
+        </p>
+        <div class="footer-social" style="margin-top: 8px;">
+          <a href="https://www.linkedin.com/company/techgenius-charusat/" target="_blank"><img src="linkdin.jpeg" alt="LinkedIn" /></a>
+          <a href="https://www.instagram.com/techgenius_charusat?igsh=NGh4dngzNW5lcHds" target="_blank"><img src="https://github.com/Jaymin-2603/image/raw/main/Instagram.jpg" alt="Instagram" /></a>
+          <a href="#" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub" style="width:32px;height:32px;filter:invert(0.2);" /></a>
+        </div>
+      </div>
+      <!-- Address + Copyright (Far Right) -->
+      <div class="footer-col footer-address">
+        <h3>University Address</h3>
+        <p style="font-size:0.95em;">
+          <b>CHARUSAT Campus</b>,<br>
+          139, Highway, off Nadiad - Petlad Road,<br>
+          Changa, Gujarat 388421
+        </p>
+        <div class="footer-bottom" style="margin-top: 1.2rem;">
+          <span>Made with <span style="color:#ff6ec7;">&#10084;</span> by Tech Genius Club</span>
+          <span>&copy; 2025 Tech Genius Club. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script src="script.js"></script>
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Add .animated-img to all images in .card, .committee-card, .home-section, and .about-section
+    window.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.card img, .committee-card img, .home-section img, .about-section img').forEach(function(img) {
+        img.classList.add('animated-img');
+      });
+    });
+    // AOS: replay animation every time element enters viewport (scroll up/down)
+    AOS.init({ duration: 1200, once: false, mirror: true, easing: 'ease-out-back' });
+  </script>
+</body>
+</html>
